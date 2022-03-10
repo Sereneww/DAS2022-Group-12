@@ -44,6 +44,8 @@ The data was sourced from 141 countries and territories on our world indata in 2
 A total of three indicators were selected for the independent variables, with environmental factors measured by PM2.5 air pollution, mean annual exposure (micrograms per cubic meter).Nutritional levels are measured by Daily caloric supply (OWID based on UN FAO & historical sources).The economic indicators are GDP per capita.They are included in the initial model as x1,x2,x3 respectively.
 The dependent variable is the total number of deaths due to disease, which is included in the model as y.
 
+## from branch 1
+
 Before starting the analysis, we need to have a general idea of how the data relate to each other. 
 
 ```{r code1.1}
