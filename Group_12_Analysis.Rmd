@@ -27,7 +27,7 @@ library(gridExtra)
 
 ## summary
 
-In order to investigate which factors are associated with the number of deaths due to disease, we selected three different indicators (pm2.5, daily calorie intake per capita, gdp per capita) from 141 countries and regions in three different directions (air quality, nutrition level, economic level) and used a multiple linear regression model to first test the correlation coefficients on the cross-sectional data, pass and then build a stepwise regression model. Irrelevant variables were excluded, followed by significance tests, normality tests, homoscedasticity tests and independence tests on the equation coefficients. All basic tests were passed at a significance level of 0.05, after which the model was regressed and the effect of pm2.5 and daily calorie intake on the number of deaths was found to be more significant.
+ccccc In order to investigate which factors are associated with the number of deaths due to disease, we selected three different indicators (pm2.5, daily calorie intake per capita, gdp per capita) from 141 countries and regions in three different directions (air quality, nutrition level, economic level) and used a multiple linear regression model to first test the correlation coefficients on the cross-sectional data, pass and then build a stepwise regression model. Irrelevant variables were excluded, followed by significance tests, normality tests, homoscedasticity tests and independence tests on the equation coefficients. All basic tests were passed at a significance level of 0.05, after which the model was regressed and the effect of pm2.5 and daily calorie intake on the number of deaths was found to be more significant.
 
 
 ```{r load and set,eval=TRUE}
