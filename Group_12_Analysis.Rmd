@@ -1,127 +1,168 @@
 ---
-title: "groupwork"
-output: pdf_document
+title: "groupwork2"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r,eval=TRUE}
+```{r pacakages}
 library(ggplot2)
-library(dplyr)
-library(ggcorrplot)
-library(tseries)
-library(RColorBrewer)
-library(ggstatsplot)
-library(car)
-library(GGally)
-library(knitr)
-library(moderndive)
-library(gapminder)
-library(skimr)
-library(kableExtra)
-library(gridExtra)
+library(qcc)
+library(arm)
+library(jtools)
+library(broom)
+library(ggstance)
 ```
 
+## 1.Description of the problem
 
-## summary
+(Describe the data set, the problem, the methods used.)
 
-In order to investigate which factors are associated with the number of deaths due to disease, we selected three different indicators (pm2.5, daily calorie intake per capita, gdp per capita) from 141 countries and regions in three different directions (air quality, nutrition level, economic level) and used a multiple linear regression model to first test the correlation coefficients on the cross-sectional data, pass and then build a stepwise regression model. Irrelevant variables were excluded, followed by significance tests, normality tests, homoscedasticity tests and independence tests on the equation coefficients. All basic tests were passed at a significance level of 0.05, after which the model was regressed and the effect of pm2.5 and daily calorie intake on the number of deaths was found to be more significant.
-
-
-```{r load and set,eval=TRUE}
-dataw<-read.csv("/Users/serene/Desktop/gpwork.csv")
-y <- dataw$total.deaths
-x1 <- dataw$pm2.5
-x2 <- dataw$Caloric.supply.
-x3 <- dataw$GDP.
-mydata <- data.frame(y,x1,x2,x3)
-```
-
-## Data presentation and description
-The data was sourced from 141 countries and territories on our world indata in 2017. 
-A total of three indicators were selected for the independent variables, with environmental factors measured by PM2.5 air pollution, mean annual exposure (micrograms per cubic meter).Nutritional levels are measured by Daily caloric supply (OWID based on UN FAO & historical sources).The economic indicators are GDP per capita.They are included in the initial model as x1,x2,x3 respectively.
-The dependent variable is the total number of deaths due to disease, which is included in the model as y.
-
-## from branch 1
-
-Before starting the analysis, we need to have a general idea of how the data relate to each other. 
-
-```{r code1.1}
-ggpairs(mydata,columns = 2:4,
-        lower = list(continuous="points"),
-        diag = list(continuous="densityDiag"),
-        upper = list(continuous="cor"))+
-  scale_color_manual(values=c("red","blue","green"))+
-  scale_fill_manual(values = c("orange","yellow","purple"))+
-  theme_bw()
-```
-
-```{r code1.2}
-corr <- round(cor(dataw[,2:5]),1)
-ggcorrplot(corr, hc.order = TRUE, 
-           type = "lower", 
-           lab = TRUE, 
-           lab_size = 5, 
-           colors = c("#6D9EC1", "white", "#E46726"), 
-           title="Correlogram of data", 
-           ggtheme=ggplot2::theme_gray)
+```{r loading data}
+data12 <-read.csv("/Users/serene/Desktop/seme2/das/dataset12.csv")
+data12<-na.omit(data12)
 
 ```
 
-By testing the correlation between the independent variables, we found a significant linear relationship between gdp and calories per capita per day, with the remaining variables correlating to a lesser extent, and further testing is required for the specific analysis.
+## 2.Descriptive statistics
 
-##Stepwise regression analysis
+2.1  Descriptive statistics for independent variables
 
-```{r model1}
-fitmodel <- lm(y~x1+x2+x3,data=mydata)
-summary(fitmodel)
-kappa(fitmodel)
+```{r boxplot for Independent variables}
+unique(data12$animal_type)
+p1 <- ggplot(data=data12,aes(x=animal_type,y=time_at_shelter))
+p1+geom_boxplot()
+p1+geom_boxplot(aes(fill=animal_type))
+
+unique(data12$intake_type)
+p2 <- ggplot(data=data12,aes(x=intake_type,y=time_at_shelter))
+p2+geom_boxplot()
+p2+geom_boxplot(aes(fill=intake_type))
+
+unique(data12$outcome_type)
+p3 <- ggplot(data=data12,aes(x=outcome_type,y=time_at_shelter))
+p3+geom_boxplot()
+p3+geom_boxplot(aes(fill=outcome_type))
+
+unique(data12$chip_status)
+p4 <- ggplot(data=data12,aes(x=chip_status,y=time_at_shelter))
+p4+geom_boxplot()
+p4+geom_boxplot(aes(fill=chip_status))
+
+unique(data12$year)
+data12$year <- as.character(data12$year)
+p5 <- ggplot(data=data12,aes(x=year,y=time_at_shelter))
+p5+geom_boxplot()
+p5+geom_boxplot(aes(fill=year))
 ```
 
-The first model fit, but did not pass the multicollinearity test, considered to be due to the strong correlation between the variables. Therefore stepwise regression was adopted for variable screening.
+(Box line diagram description)
 
-```{r model2}
-step(fitmodel,direction = "both")
-fitmodel2 <- lm(y ~ x1 + x2,data=mydata)
-summary(fitmodel2)
-kappa(fitmodel2)
+2.2 Determining the distribution of response variables
+
+```{r}
+summary(data12$time_at_shelter)
+
+ggplot(data=data12,aes(x=time_at_shelter))+
+  geom_histogram(aes(y=..density..),colour="black", fill="white",breaks=seq(0,80,6))+
+  xlim(0,80)+
+  geom_density(alpha=.2, fill="red")
 ```
 
-The stepwise regression only incorporates x1,x2, and these two were selected to build modle2,However, the problem of multicollinearity was still found to exist, so a logarithmic transformation of the model was considered.
+The data was found not to be in the form of a bell curve like a normal distribution.
+Next, test the mean and variance
+```{r}
+mean(data12$time_at_shelter)
+var(data12$time_at_shelter)
+```
+By examining the mean and variance, it was found that the variance was much larger than the mean, indicating that there would be overdispersion in the model
 
-```{r final model & table}
-fitmodel3 <- lm(log(y) ~ log(x1) + log(x2),data=mydata)
-summary(fitmodel3)
-kappa(fitmodel3) 
+## 3.Model selection
 
-get_regression_table(fitmodel3)%>%
-  kable(caption = '\\label{tab:reg} Estimates of the intercept and slope from the fitted linear regression model.',format = "latex")
+(Explain the glm model, the Poisson family of distributions, and why we chose the Poisson distribution for the glm regression.)
 
+## 4.Building a glm Poisson regression model
+
+```{r poison model}
+poimodel <- glm(time_at_shelter ~.,
+                data = data12,family = poisson)
+summary(poimodel)
+```
+Exponentiated to better explain the model parameters.
+```{r}
+exp(coef(poimodel))
+```
+The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
+Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
+
+## 5.Model testing and Poisson-like models
+
+The general cause of this problem is the lack of explanatory variables. We can use the qcc package for Poisson models to test for overdiscrepancy.
+```{r}
+qcc.overdispersion.test(data12$time_at_shelter, type = "poisson")
+```
+p-values are 0, there is an excessive departure from the potential and a Poisson-like model is chosen for modelling
+
+Only significant variables and variables of substance are retained here
+
+```{r quasipoisson model}
+
+fit3 <- glm(time_at_shelter ~ intake_type + outcome_type + chip_status, family = quasipoisson(), data = data12)
+summary(fit3)
+exp(coef(fit3))
 ```
 
-The results illustrate that the p-values of the log-transformed x1 and x2 and the unstandardised regression coefficients of the constants are all less than 0.05 and pass the t-test. When each 0.963% increase in the air pollution index is associated with a 1% increase in deaths and a 2.527% increase in daily calorie consumption per capita is associated with a 1% increase in deaths, the model shows that gdp per capita is not a significant variable and the combination of the correlation plots shows that the reason for the insignificance comes from the covariance between gdp and daily calories.
+## 6.Model comparison and parameter interpretation
 
+To compare the Poisson-like distribution model with the Poisson distribution model, while making the original Poisson distribution model
 
-##Testing the model with residual analysis
-
-```{r Normality test, homoscedasticity test, independence test}
-shapiro.test(rstandard(fitmodel3)) 
-ncvTest(fitmodel3)
-durbinWatsonTest(fitmodel3)
-```
-All mean values are greater than 0.05 and pass the test.
-
-```{r residual plot}
-par(mfrow=c(2,2))
-plot(fitmodel3)
+```{r poisson model2}
+fit2 <- glm(time_at_shelter ~ intake_type + outcome_type + chip_status, family = poisson(), data = data12)
+summary(fit2)
+exp(coef(fit2))
 ```
 
-The scatter plots showed that the residuals were approximately evenly distributed above and below the zero line, so the assumption that the residuals had a mean of zero appeared to be valid. The histogram supports the assumption of normally distributed errors in the model.
 
-## Conclusion and the future
+```{r comparison for 2 models}
+coef1 = coef(fit2)
+coef2 = coef(fit3)
+se.coef1 = se.coef(fit2)
+se.coef2 = se.coef(fit3)
+models.both <- cbind(coef1,se.coef1,coef2,se.coef2,exponent = exp(coef1))
+models.both
+```
 
-This analysis tried to explore the factors affecting the number of deaths by selecting three different aspects of indicators, and the results showed that air quality and nutrition level had a more significant effect on the number of deaths. At the same time, we find that there is a closer association between gdp and per capita nutritional intake, and later improvements to the model could try to replace gdp factors in other areas.
-We note that the coefficients of the regression model are not very high, which proves that the predictive power of the model is weak. Considering that this is due to the problem that the causes of death from disease are influenced by many other factors, the next work will also consider adding variables to improve the predictive power of the model.
+Comparing the results of the above two model parameters shows that the parameter estimates are consistent while the standard errors are different.
+In the case of over-discrepancy, the t-value/p-value of the Poisson-like results should be used to test the significance of the independent variables.
 
+(Explanation of model parameters)
+
+## 7.Visualisation of model results
+```{r}
+plot_coefs(fit3)
+plot_summs(fit2,fit3,scale=T,exp=T)
+```
+
+The regression coefficients are compared with the same values but the standard errors are greater for the Poisson-like distribution model.
+
+## 8.Summary
+
+(Response to questions, summary of results.)
+
+## 9.Future work
+
+The problem of too many zero values in the data, consider the zero-inflated Poisson distribution model.
+
+## 10.Reference
+
+Chen Qiang. Advanced econometrics and Stata applications [M]. Higher Education Press, 2014.
+
+Xu Xin. (2020). A generalization of the zero-inflated generalized Poisson model and its application to actuarial calculations. Mathematical Statistics and Management
+
+Wilson, P. 2015. The misuse of the Vuong test for non-nested models to test for zero-inflation. Economics Letters 127:51-53. -Link-, -PDF-
+
+Van den Broek, J. (1995). A Score Test for Zero Inflation in a Poisson Distribution. Biometrics, 51(2), 738-743. -Link-, -PDF-
+
+Vuong, Q. H. (1989). Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses. Econometrica, 57(2), 307–333. -Link-, -PDF-
