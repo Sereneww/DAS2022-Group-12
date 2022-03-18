@@ -18,7 +18,7 @@ library(ggstance)
 
 ## 1.Description of the problem
 
-(Describe the data set, the problem, the methods used.)
+(Describe the data set, the question, the methods used.  ...)
 
 ```{r loading data}
 data12 <-read.csv("/Users/serene/Desktop/seme2/das/dataset12.csv")
