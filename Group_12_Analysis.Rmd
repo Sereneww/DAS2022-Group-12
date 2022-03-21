@@ -95,9 +95,8 @@ fitglm <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_
 summary(fitglm)
 ```
 Exponentiated to better explain the model parameters.
-```{r}
-exp(coef(poimodel))
-```
+
+
 The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
 Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
 
