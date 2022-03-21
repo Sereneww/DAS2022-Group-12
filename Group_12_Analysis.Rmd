@@ -45,28 +45,40 @@ unique(data12$animal_type)
 p1 <- ggplot(data=data12,aes(x=animal_type,y=time_at_shelter))
 p1+geom_boxplot()
 p1+geom_boxplot(aes(fill=animal_type))
+```
+Box plot for animal_type.
 
+```
 unique(data12$intake_type)
 p2 <- ggplot(data=data12,aes(x=intake_type,y=time_at_shelter))
 p2+geom_boxplot()
 p2+geom_boxplot(aes(fill=intake_type))
-
+```
+Box plot for intake_type.
+```
 unique(data12$outcome_type)
 p3 <- ggplot(data=data12,aes(x=outcome_type,y=time_at_shelter))
 p3+geom_boxplot()
 p3+geom_boxplot(aes(fill=outcome_type))
+```
+Box plot for outcome_type.
 
+```
 unique(data12$chip_status)
 p4 <- ggplot(data=data12,aes(x=chip_status,y=time_at_shelter))
 p4+geom_boxplot()
 p4+geom_boxplot(aes(fill=chip_status))
+```
+Box plot for chip_status.
 
+```
 unique(data12$year)
 data12$year <- as.character(data12$year)
 p5 <- ggplot(data=data12,aes(x=year,y=time_at_shelter))
 p5+geom_boxplot()
 p5+geom_boxplot(aes(fill=year))
 ```
+Box plot for year.
 
 (Box line diagram description)
 
