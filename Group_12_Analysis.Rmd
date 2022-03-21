@@ -31,7 +31,7 @@ library(MASS)
 (Describe the data set, the problem, the methods used.)
 
 ```{r loading data}
-data12 <-read.csv("/Users/serene/Desktop/seme2/das/dataset12.csv")
+data12 <-read.csv("dataset12.csv")
 data12<-na.omit(data12)
 
 ```
