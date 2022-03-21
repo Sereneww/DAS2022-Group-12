@@ -30,6 +30,10 @@ library(MASS)
 
 (Describe the data set, the problem, the methods used.)
 
+For this data set, it describe the situation that each animal admitted to the shelter. there are 7 variables contains which are xxxxxxxxx. 
+this project aiming for determinatesXXXX(research question). 
+method:
+
 ```{r loading data}
 data12 <-read.csv("dataset12.csv")
 data12<-na.omit(data12)
