@@ -12,8 +12,13 @@ library(ggplot2)
 library(qcc)
 library(arm)
 library(jtools)
+library(ggstatsplot)
+library(pscl)
+library(lmtest)
+library(ggpubr)
 library(broom)
 library(ggstance)
+library(MASS)
 ```
 
 ## 1.Description of the problem
@@ -83,21 +88,7 @@ By examining the mean and variance, it was found that the variance was much larg
 
 (Explain the glm model, the Poisson family of distributions, and why we chose the Poisson distribution for the glm regression.)
 
-## 4.Building a glm Poisson regression model
-
-```{r poison model}
-poimodel <- glm(time_at_shelter ~.,
-                data = data12,family = poisson)
-summary(poimodel)
-```
-Exponentiated to better explain the model parameters.
-```{r}
-exp(coef(poimodel))
-```
-The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
-Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
-
-## 5.Model testing and Poisson-like models
+## 4.Model testing and Model Correction
 
 The general cause of this problem is the lack of explanatory variables. We can use the qcc package for Poisson models to test for overdiscrepancy.
 ```{r}
@@ -105,57 +96,136 @@ qcc.overdispersion.test(data12$time_at_shelter, type = "poisson")
 ```
 p-values are 0, there is an excessive departure from the potential and a Poisson-like model is chosen for modelling
 
-Only significant variables and variables of substance are retained here
+Next, test the mean and variance
+```{r}
+mean(data12$time_at_shelter)
+var(data12$time_at_shelter)
+```
+By examining the mean and variance, it was found that the variance was much larger than the mean, indicating that there would be overdispersion in the model
+
+
+## 5.Model Correction
+
+5.1 Poisson-like distribution models
 
 ```{r quasipoisson model}
 
-fit3 <- glm(time_at_shelter ~ intake_type + outcome_type + chip_status, family = quasipoisson(), data = data12)
-summary(fit3)
-exp(coef(fit3))
+fitquasi <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_status, family = quasipoisson(), data = data12)
+summary(fitquasi)
+
 ```
+
 
 ## 6.Model comparison and parameter interpretation
 
 To compare the Poisson-like distribution model with the Poisson distribution model, while making the original Poisson distribution model
 
-```{r poisson model2}
-fit2 <- glm(time_at_shelter ~ intake_type + outcome_type + chip_status, family = poisson(), data = data12)
-summary(fit2)
-exp(coef(fit2))
-```
-
 
 ```{r comparison for 2 models}
-coef1 = coef(fit2)
-coef2 = coef(fit3)
-se.coef1 = se.coef(fit2)
-se.coef2 = se.coef(fit3)
+coef1 = coef(fitglm)
+coef2 = coef(fitquasi)
+se.coef1 = se.coef(fitglm)
+se.coef2 = se.coef(fitquasi)
 models.both <- cbind(coef1,se.coef1,coef2,se.coef2,exponent = exp(coef1))
 models.both
 ```
-
 Comparing the results of the above two model parameters shows that the parameter estimates are consistent while the standard errors are different.
 In the case of over-discrepancy, the t-value/p-value of the Poisson-like results should be used to test the significance of the independent variables.
 
+
+
+```{r}
+pchisq(fitquasi$deviance,df = fitquasi$df.residual,lower.tail = FALSE)
+
+```
+Passes the chi-square test
+
 (Explanation of model parameters)
 
-## 7.Visualisation of model results
-```{r}
-plot_coefs(fit3)
-plot_summs(fit2,fit3,scale=T,exp=T)
-```
 
-The regression coefficients are compared with the same values but the standard errors are greater for the Poisson-like distribution model.
-
-## 8.Summary
+## 7.Summary
 
 (Response to questions, summary of results.)
 
-## 9.Future work
+## 8.Future work
 
-The problem of too many zero values in the data, consider the zero-inflated Poisson distribution model.
+1.The problem of too many zero values in the data, consider the zero-inflated Poisson distribution model.
 
-## 10.Reference
+```{r zero-inflation}
+
+zeroani <- subset(data12$animal_type, data12$time_at_shelter == "0")
+table(zeroani)
+table(data12$animal_type)
+zeroani <- as.data.frame(zeroani)
+
+pani <- ggpiestats(data12,'animal_type',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pani
+pani2 <- ggpiestats(zeroani,'zeroani',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pani2
+
+
+zeroint <- subset(data12$intake_type, data12$time_at_shelter == "0")
+table(zeroint)
+zeroint <- as.data.frame(zeroint)
+
+table(data12$intake_type)
+
+pint <- ggpiestats(data12,'intake_type',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pint
+
+pint2 <- ggpiestats(zeroint,'zeroint',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pint2
+
+zeroout <- subset(data12$outcome_type, data12$time_at_shelter == "0" )
+zeroout <- as.data.frame(zeroout)
+table(data12$outcome_type)
+
+pout <- ggpiestats(data12,'outcome_type',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pout
+
+pout2 <- ggpiestats(zeroout,'zeroout',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pout2
+
+
+zerochip <- subset(data12$chip_status, data12$time_at_shelter == "0")
+zerochip <- as.data.frame(zerochip)
+
+table(data12$chip_status)
+
+pchip <- ggpiestats(data12,'chip_status',
+                   results.subtitle = F,
+                   palette = 'Pastel2')
+pchip
+
+pchip2 <- ggpiestats(zerochip,'zerochip',
+                    results.subtitle = F,
+                    palette = 'Pastel2')
+pchip2
+
+ggarrange(pani,pani2,common.legend = T,legend = "left")
+ggarrange(pint,pint2,common.legend = T,legend = "left")
+ggarrange(pout,pout2,common.legend = T,legend = "left")
+ggarrange(pchip,pchip2,common.legend = T,legend = "left")
+```
+
+It can be observed that the proportions of raw and zero-only screened values are almost similar for the remaining variables, except for the outcome variable, which has a significantly larger proportion of both types of euthanasia and return to owner. Given a realistic perspective, it is reasonable that these two types spend zero days in the shelter. Here we argue that the outcome variable can be classified as a zero-inflated intra-model variable, i.e. he is related to whether the number of days is >0, while the remaining three variables are point intra-model variables, i.e. they are related to the length of the days.
+
+2.Multi-level zero-inflation problems: Most focus on 0 to 5, consider data grouping or a multi-level zero-inflation model.
+
+
+## 9.Reference
 
 Chen Qiang. Advanced econometrics and Stata applications [M]. Higher Education Press, 2014.
 
