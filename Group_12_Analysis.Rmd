@@ -1,7 +1,11 @@
 ---
 title: "groupwork2"
-output: html_document
+output:  
+  pdf_document:
+          number_sections: yes
+fig_caption: yes
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
