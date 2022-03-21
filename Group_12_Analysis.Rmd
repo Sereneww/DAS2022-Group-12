@@ -88,6 +88,20 @@ By examining the mean and variance, it was found that the variance was much larg
 
 (Explain the glm model, the Poisson family of distributions, and why we chose the Poisson distribution for the glm regression.)
 
+
+```{r poison model}
+fitglm <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_status,
+                data = data12,family = poisson)
+summary(fitglm)
+```
+Exponentiated to better explain the model parameters.
+```{r}
+exp(coef(poimodel))
+```
+The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
+Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
+
+
 ## 4.Model testing and Model Correction
 
 The general cause of this problem is the lack of explanatory variables. We can use the qcc package for Poisson models to test for overdiscrepancy.
