@@ -1,3 +1,4 @@
+
 ---
 title: "groupwork2"
 output:  
@@ -27,10 +28,10 @@ library(MASS)
 
 ## 1.Description of the problem
 
-(Describe the data set, the question, the methods used.  ...)
+(Describe the data set, the problem, the methods used.)
 
 ```{r loading data}
-data12 <-read.csv("dataset12.csv")
+data12 <-read.csv("/Users/serene/Desktop/seme2/das/dataset12.csv")
 data12<-na.omit(data12)
 
 ```
@@ -80,15 +81,9 @@ ggplot(data=data12,aes(x=time_at_shelter))+
   geom_density(alpha=.2, fill="red")
 ```
 
-The data was found not to be in the form of a bell curve like a normal distribution.
-Next, test the mean and variance
-```{r}
-mean(data12$time_at_shelter)
-var(data12$time_at_shelter)
-```
-By examining the mean and variance, it was found that the variance was much larger than the mean, indicating that there would be overdispersion in the model
 
-## 3.Model selection
+
+## 3.Building a glm Poisson regression model
 
 (Explain the glm model, the Poisson family of distributions, and why we chose the Poisson distribution for the glm regression.)
 
@@ -100,10 +95,8 @@ summary(fitglm)
 ```
 Exponentiated to better explain the model parameters.
 
-
 The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
 Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
-
 
 ## 4.Model testing and Model Correction
 
@@ -120,7 +113,6 @@ var(data12$time_at_shelter)
 ```
 By examining the mean and variance, it was found that the variance was much larger than the mean, indicating that there would be overdispersion in the model
 
-
 ## 5.Model Correction
 
 5.1 Poisson-like distribution models
@@ -131,6 +123,8 @@ fitquasi <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chi
 summary(fitquasi)
 
 ```
+
+
 
 
 ## 6.Model comparison and parameter interpretation
@@ -159,7 +153,6 @@ Passes the chi-square test
 
 (Explanation of model parameters)
 
-
 ## 7.Summary
 
 (Response to questions, summary of results.)
@@ -170,9 +163,10 @@ Passes the chi-square test
 
 ```{r zero-inflation}
 
+table(data12$time_at_shelter)
 zeroani <- subset(data12$animal_type, data12$time_at_shelter == "0")
 table(zeroani)
-table(data12$animal_type)
+
 zeroani <- as.data.frame(zeroani)
 
 pani <- ggpiestats(data12,'animal_type',
@@ -203,6 +197,7 @@ pint2
 
 zeroout <- subset(data12$outcome_type, data12$time_at_shelter == "0" )
 zeroout <- as.data.frame(zeroout)
+table(zeroout)
 table(data12$outcome_type)
 
 pout <- ggpiestats(data12,'outcome_type',
@@ -241,7 +236,6 @@ It can be observed that the proportions of raw and zero-only screened values are
 
 2.Multi-level zero-inflation problems: Most focus on 0 to 5, consider data grouping or a multi-level zero-inflation model.
 
-
 ## 9.Reference
 
 Chen Qiang. Advanced econometrics and Stata applications [M]. Higher Education Press, 2014.
@@ -253,3 +247,5 @@ Wilson, P. 2015. The misuse of the Vuong test for non-nested models to test for 
 Van den Broek, J. (1995). A Score Test for Zero Inflation in a Poisson Distribution. Biometrics, 51(2), 738-743. -Link-, -PDF-
 
 Vuong, Q. H. (1989). Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses. Econometrica, 57(2), 307–333. -Link-, -PDF-
+
+
