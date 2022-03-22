@@ -29,7 +29,7 @@ library(MASS)
 ## 1.Description of the problem
 
 (Describe the data set, the problem, the methods used.)
-
+dfgdfg
 ```{r loading data}
 data12 <-read.csv("dataset12.csv")
 data12<-na.omit(data12)
