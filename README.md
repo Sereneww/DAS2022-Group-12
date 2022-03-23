@@ -1,12 +1,17 @@
 Group number: 12 
 ------------------
 
-Group Members : Shuang Yang (2614596)  Ruofan Wang(2627659) Jiayi  Wang(2648246) Yilei  Ma(2612840)
-------------------
+## Group Members 
 
-## Research question: What factors influence the number of days an animal spends in a shelter before deciding its final outcome？
+Shuang Yang (2614596)  Ruofan Wang(2627659) 
+Jiayi  Wang(2648246)     Yilei  Ma(2612840)
 
-## The installation package:
+## Research question
+
+What factors influence the number of days an animal spends in a shelter before deciding its final outcome？
+
+## The installation package
+
 library(ggplot2)
 library(qcc)
 library(arm)
