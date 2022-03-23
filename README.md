@@ -10,7 +10,7 @@ Jiayi  Wang(2648246)     Yilei  Ma(2612840)
 
 What factors influence the number of days an animal spends in a shelter before deciding its final outcome？
 
-## The installation package
+## The installation packages
 
 library(ggplot2)
 library(qcc)
