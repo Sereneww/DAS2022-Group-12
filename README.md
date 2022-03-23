@@ -1,12 +1,12 @@
 Group number: 12 
-==================
+------------------
 
 Group Members : Shuang Yang (2614596)  Ruofan Wang(2627659) Jiayi  Wang(2648246) Yilei  Ma(2612840)
 ------------------
 
-Research question: What factors influence the number of days an animal spends in a shelter before deciding its final outcome？
----------------------------------
-The installation package:
+## Research question: What factors influence the number of days an animal spends in a shelter before deciding its final outcome？
+
+## The installation package:
 library(ggplot2)
 library(qcc)
 library(arm)
@@ -18,8 +18,6 @@ library(ggpubr)
 library(broom)
 library(ggstance)
 library(MASS)
----------------------------------
-
 
 
 
@@ -31,7 +29,7 @@ The Dallas Animal Shelter recorded the number of days each animal spent at the s
 
 ## The main method
 
-###Analyze the data
+Analyze the data
 Analyze box graphs of all independent variables; Analyze the distribution of the dependent variable Y.
 Evaluation: The data is not the curve form of normal distribution, and the dependent variable Y conforms to poisson distribution; Excessive dispersion appears in the model; A lot of zeros appear in the data set.
 
@@ -52,7 +50,7 @@ Conclusion: The change of Type results in fewer days in the shelter. All are sig
 
 GLM Poisson distribution model has excessive ionization phenomenon, and the standard error of Poisson like distribution model is large.
 
-##Future jobs
+## Future jobs
 
 Poisson distribution model and Poisson-like distribution model both have errors to a certain extent. Since there are too many zeros in the data set, zero-expansion Poisson regression model will be considered later
 f(y_i,"λ" _i,ω_i )={█(ω_i+(1-ω_i ) e^(〖-λ〗_i ),y_i=0@((1-ω_i)e^(〖-λ〗_i ) λ_(i^(y^i ) ))/(y_i !),y_i=1,2,…,n)┤
