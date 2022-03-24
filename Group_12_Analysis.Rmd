@@ -167,6 +167,7 @@ Passes the chi-square test
 
 ## 7.Summary
 
+we conclude that...
 (Response to questions, summary of results.)
 
 ## 8.Future work
