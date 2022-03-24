@@ -246,14 +246,10 @@ It can be observed that the proportions of raw and zero-only screened values are
 
 ## 9.Reference
 
-Chen Qiang. Advanced econometrics and Stata applications [M]. Higher Education Press, 2014.
-
-Xu Xin. (2020). A generalization of the zero-inflated generalized Poisson model and its application to actuarial calculations. Mathematical Statistics and Management
-
-Wilson, P. 2015. The misuse of the Vuong test for non-nested models to test for zero-inflation. Economics Letters 127:51-53. -Link-, -PDF-
-
-Van den Broek, J. (1995). A Score Test for Zero Inflation in a Poisson Distribution. Biometrics, 51(2), 738-743. -Link-, -PDF-
-
-Vuong, Q. H. (1989). Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses. Econometrica, 57(2), 307–333. -Link-, -PDF-
-
+[1]Chen Qiang. Advanced econometrics and Stata applications [M]. Higher Education Press, 2014. 
+[2]Vernic, Raluca. A Multivariate Generalization of the Generalized Poisson Distribution[J]. Astin Bulletin, 2000, 30(01):57-67.
+[3] Wilson P . The misuse of the Vuong test for non-nested models to test for zero-inflation[J]. Economics Letters, 2015.
+[4] Broek J V D . A Score Test for Zero Inflation in a Poisson Distribution[J]. Biometrics, 1995, 51(2):738-743.
+[5] Vuong Q H . Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses[J]. Working Papers, 1986.
+  
 
