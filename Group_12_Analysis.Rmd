@@ -12,6 +12,8 @@ fig_caption: yes
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Load the packets required for this analysis
+
 ```{r pacakages}
 library(ggplot2)
 library(qcc)
@@ -28,8 +30,6 @@ library(MASS)
 
 ## 1.Description of the problem
 The Dallas Animal Shelter recorded the number of days each animal spent at the shelter in 2016 and 2017, and recorded additional information about the animals. It can be found that the factors in the data set have a certain impact on the number of days to be taken in. Our team wanted to calculate the correlation between these factors and the final number of days to be taken in, so the team chose THE GLM Poisson regression model to analyze the data. Poisson distribution in the generalized linear model can directly express the strength of the correlation between independent variables and dependent variables composed of discrete data. Meanwhile, additional explanations are needed for missing values and outliers in the data set, as well as for the comparison of the influence degree of the last several factors on the final days of detention.
-
-
 
 ```{r loading data}
 data12 <-read.csv("dataset12.csv")
@@ -81,7 +81,8 @@ p5+geom_boxplot(aes(fill=year))
 ```
 Box plot for year.
 
-(Box line diagram description)
+The box line plot shows that some of the variables exhibit outliers. We will select three variables for specific analysis.
+
 
 2.2 Determining the distribution of response variables
 
@@ -97,12 +98,12 @@ ggplot(data=data12,aes(x=time_at_shelter))+
 
 ## 3.Building a glm Poisson regression model
 
-
 ```{r poison model}
 fitglm <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_status,
                 data = data12,family = poisson)
 summary(fitglm)
 ```
+
 Exponentiated to better explain the model parameters.
 
 The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
@@ -152,22 +153,18 @@ Comparing the results of the above two model parameters shows that the parameter
 In the case of over-discrepancy, the t-value/p-value of the Poisson-like results should be used to test the significance of the independent variables.
 
 
-
 ```{r}
 pchisq(fitquasi$deviance,df = fitquasi$df.residual,lower.tail = FALSE)
 
 ```
 Passes the chi-square test
 
-(Explanation of model parameters)
-
 ## 7.Summary
 
-we conclude that...
+In this modelling, we found that the Poisson-like model had the same parameter estimates as the Poisson model, but the standard errors of the Poisson-like model were greater. A review of the relevant literature suggests that we should use the p-value of the Poisson-like model for interpretation.
 
 We found that all variables were significant, except for animal type. We show in detail in the results table the degree of influence of the variables on the number of days in the shelter.
 
-(Response to questions, summary of results.)
 
 ## 8.Future work
 
