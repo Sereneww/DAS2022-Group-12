@@ -36,7 +36,7 @@ data12<-na.omit(data12)
 
 ```
 
-## 2.Descriptive statistics
+## 2.Exploratory data analysis
 
 2.1  Descriptive statistics for independent variables
 
