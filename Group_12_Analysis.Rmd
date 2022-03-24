@@ -164,7 +164,7 @@ Passes the chi-square test
 
 we conclude that...
 
-2.we conclude that...
+We found that all variables were significant, except for animal type. We show in detail in the results table the degree of influence of the variables on the number of days in the shelter.
 
 (Response to questions, summary of results.)
 
