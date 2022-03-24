@@ -1,16 +1,12 @@
-
 ---
 title: "Group_12_Analysis"
-output:  
-  pdf_document:
-          number_sections: yes
-fig_caption: yes
+output: pdf_document
 ---
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 Load the packages required for this analysis.
 
