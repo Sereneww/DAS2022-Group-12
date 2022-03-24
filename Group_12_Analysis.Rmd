@@ -12,7 +12,7 @@ fig_caption: yes
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Load the packets required for this analysis
+Load the packages required for this analysis.
 
 ```{r pacakages}
 library(ggplot2)
@@ -29,6 +29,7 @@ library(MASS)
 ```
 
 ## 1.Description of the problem
+
 The Dallas Animal Shelter recorded the number of days each animal spent at the shelter in 2016 and 2017, and recorded additional information about the animals. 
 It can be found that the factors in the data set have a certain impact on the number of days to be taken in. Our team wanted to calculate the correlation between 
 these factors and the final number of days to be taken in, so the team chose THE GLM Poisson regression model to analyze the data. 
@@ -40,7 +41,6 @@ influence degree of the last several factors on the final days of detention.
 ```{r loading data}
 data12 <-read.csv("dataset12.csv")
 data12<-na.omit(data12)
-
 ```
 
 ## 2.Exploratory data analysis
@@ -100,7 +100,7 @@ ggplot(data=data12,aes(x=time_at_shelter))+
   xlim(0,80)+
   geom_density(alpha=.2, fill="red")
 ```
-
+The distribution of y is right-skewed and we assume a family of Poisson distributions in the exponential distribution. Secondly, it can be seen that the distribution of y values is significantly larger than the other values in days 0 to 5, considering the phenomenon of excessive outlying potential.
 
 ## 3.Building a glm Poisson regression model
 
@@ -109,11 +109,11 @@ fitglm <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_
                 data = data12,family = poisson)
 summary(fitglm)
 ```
-
-Exponentiated to better explain the model parameters.
+We have developed a Poisson regression model and can see that all variables are significant except for animal type, but further model testing is needed to see if this model can be used to explain this.
 
 The problem of excessive departure from the potential needs attention in #Poisson regression. The mean and variance are equal in a Poisson distribution.
 Such a problem may arise in Poisson regression when the actual distribution of the observed response variable does not satisfy this.
+
 
 ## 4.Model testing and Model Correction
 
@@ -139,8 +139,11 @@ By examining the mean and variance, it was found that the variance was much larg
 
 fitquasi <- glm(time_at_shelter ~ animal_type + intake_type + outcome_type + chip_status, family = quasipoisson(), data = data12)
 summary(fitquasi)
+pchisq(fitquasi$deviance,df = fitquasi$df.residual,lower.tail = FALSE)
 
 ```
+Model asses the chi-square test.
+Based on the results of the Poisson-like model, the overall variable significance is similar to that of the original model, and we will carry out further model comparisons.
 
 ## 6.Model comparison and parameter interpretation
 
@@ -157,12 +160,6 @@ models.both
 Comparing the results of the above two model parameters shows that the parameter estimates are consistent while the standard errors are different.
 In the case of over-discrepancy, the t-value/p-value of the Poisson-like results should be used to test the significance of the independent variables.
 
-
-```{r}
-pchisq(fitquasi$deviance,df = fitquasi$df.residual,lower.tail = FALSE)
-
-```
-Passes the chi-square test.
 
 ## 7.Summary
 
