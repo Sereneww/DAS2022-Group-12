@@ -30,9 +30,12 @@ library(MASS)
 
 ## 1.Description of the problem
 The Dallas Animal Shelter recorded the number of days each animal spent at the shelter in 2016 and 2017, and recorded additional information about the animals. 
-It can be found that the factors in the data set have a certain impact on the number of days to be taken in. Our team wanted to calculate the correlation between these factors and the final number of days to be taken in, so the team chose THE GLM Poisson regression model to analyze the data. 
+It can be found that the factors in the data set have a certain impact on the number of days to be taken in. Our team wanted to calculate the correlation between 
+these factors and the final number of days to be taken in, so the team chose THE GLM Poisson regression model to analyze the data. 
 
-Poisson distribution in the generalized linear model can directly express the strength of the correlation between independent variables and dependent variables composed of discrete data. Meanwhile, additional explanations are needed for missing values and outliers in the data set, as well as for the comparison of the influence degree of the last several factors on the final days of detention.
+Poisson distribution in the generalized linear model can directly express the strength of the correlation between independent variables and dependent variables 
+composed of discrete data. Meanwhile, additional explanations are needed for missing values and outliers in the data set, as well as for the comparison of the 
+influence degree of the last several factors on the final days of detention.
 
 ```{r loading data}
 data12 <-read.csv("dataset12.csv")
@@ -143,7 +146,6 @@ summary(fitquasi)
 
 To compare the Poisson-like distribution model with the Poisson distribution model, while making the original Poisson distribution model
 
-
 ```{r comparison for 2 models}
 coef1 = coef(fitglm)
 coef2 = coef(fitquasi)
@@ -160,7 +162,7 @@ In the case of over-discrepancy, the t-value/p-value of the Poisson-like results
 pchisq(fitquasi$deviance,df = fitquasi$df.residual,lower.tail = FALSE)
 
 ```
-Passes the chi-square test
+Passes the chi-square test.
 
 ## 7.Summary
 
@@ -247,6 +249,7 @@ ggarrange(pchip,pchip2,common.legend = T,legend = "left")
 It can be observed that the proportions of raw and zero-only screened values are almost similar for the remaining variables, except for the outcome variable, which has a significantly larger proportion of both types of euthanasia and return to owner. Given a realistic perspective, it is reasonable that these two types spend zero days in the shelter. Here we argue that the outcome variable can be classified as a zero-inflated intra-model variable, i.e. he is related to whether the number of days is >0, while the remaining three variables are point intra-model variables, i.e. they are related to the length of the days.
 
 2.Multi-level zero-inflation problems: Most focus on 0 to 5, consider data grouping or a multi-level zero-inflation model.
+
 
 ## 9.Reference
 
